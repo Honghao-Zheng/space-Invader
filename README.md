@@ -6,7 +6,15 @@
 
 To get started, first clone this repository:
 ```
-git clone https://github.com/Honghao-Zheng/online-diary.git
+git clone https://github.com/Honghao-Zheng/space-invader.git
+cd space-invader
 ```
 
-then double click the index.html file
+then run the application on browser
+```
+start index.html
+# or
+xdg-open index.html
+```
+
+
