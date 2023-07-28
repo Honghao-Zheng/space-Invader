@@ -8,7 +8,7 @@ class Attacker {
     this.height = 20;
     this.position = {
       x: 180,
-      y: 370
+      y: 370,
     };
     this.speed = 0;
     this.image = document.getElementById("img_attacker");
@@ -32,29 +32,26 @@ class Attacker {
     this.speed = 0;
   }
   draw(ctx) {
-    ctx.drawImage(this.image,
+    ctx.drawImage(
+      this.image,
       this.position.x,
       this.position.y,
       this.width,
       this.height
     );
-
-
-
   }
 }
-
 
 class Bullet {
   constructor(attacker) {
     this.position = {
       x: attacker.position.x + attacker.width / 2,
-      y: attacker.position.y
+      y: attacker.position.y,
     };
 
     this.size = {
       width: 3,
-      height: -5
+      height: -5,
     };
     this.fired = false;
     this.speed = 0;
@@ -72,18 +69,21 @@ class Bullet {
   }
   draw(ctx) {
     ctx.fillStyle = "#0ff";
-    ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+    ctx.fillRect(
+      this.position.x,
+      this.position.y,
+      this.size.width,
+      this.size.height
+    );
   }
   reset() {
     this.position = {
       x: attacker.position.x + attacker.width / 2,
-      y: attacker.position.y
+      y: attacker.position.y,
     };
     this.fired = false;
     this.speed = 0;
   }
-
-
 }
 
 class Invader {
@@ -92,7 +92,7 @@ class Invader {
     this.speed = 0.7;
     this.size = {
       width: 20,
-      height: 20
+      height: 20,
     };
     this.collide = false;
     this.image = document.getElementById("img_invader");
@@ -124,7 +124,6 @@ class Invader {
   }
 }
 
-
 class EventHandler {
   constructor() {
     document.addEventListener("keydown", (event) => {
@@ -132,9 +131,7 @@ class EventHandler {
         gameLoop();
         gameState.gameStarted = true;
       } else {
-
         switch (event.code) {
-
           case "ArrowLeft":
             attacker.moveLeft();
             break;
@@ -144,9 +141,9 @@ class EventHandler {
             break;
 
           case "Space":
-          if (!bullet.fired){
-            audio_laser.play();
-          }
+            if (!bullet.fired) {
+              audio_laser.play();
+            }
             bullet.fired = true;
             break;
 
@@ -174,25 +171,20 @@ class EventHandler {
               console.log("restarted");
             }
 
-
             break;
         }
       }
-
     });
     document.addEventListener("keyup", (event) => {
       switch (event.keyCode) {
         case 37:
-          if (attacker.speed < 0)
-            attacker.stop();
+          if (attacker.speed < 0) attacker.stop();
           break;
 
         case 39:
-          if (attacker.speed > 0)
-            attacker.stop();
+          if (attacker.speed > 0) attacker.stop();
           break;
       }
-
     });
   }
 }
@@ -203,7 +195,6 @@ function collision(bullet) {
   }
 }
 
-
 function enemies(enemyCounts) {
   let invaders = [];
   enemyCounts.forEach((row, rowIndex) => {
@@ -211,7 +202,7 @@ function enemies(enemyCounts) {
       if (enemy == 1) {
         let position = {
           x: 30 + enemyIndex * 43,
-          y: 30 + rowIndex * 37
+          y: 30 + rowIndex * 37,
         };
         let invader = new Invader(position);
         invaders.push(invader);
@@ -223,9 +214,9 @@ function enemies(enemyCounts) {
 
 function collisionWall(invaders) {
   let invadersCopy = invaders;
-  invadersCopy.forEach(object => {
+  invadersCopy.forEach((object) => {
     if (object.position.x > 380 || object.position.x < 0) {
-      invaders.forEach(object => {
+      invaders.forEach((object) => {
         object.position.x -= object.speed;
         object.speed *= -1;
         object.position.y += 4;
@@ -253,9 +244,7 @@ function collisionHit(bullet, invader) {
     leftOfBullet <= rightOfInvader &&
     rightOfBullet >= leftOfInvader
   ) {
-
     return true;
-
   } else {
     return false;
   }
@@ -273,8 +262,7 @@ function gameLoop() {
   }
 
   let invader = collisionWall(invaders);
-  invader = invader.filter(object =>
-    !object.collide);
+  invader = invader.filter((object) => !object.collide);
 
   if (invader.length == 0) {
     gameState.gameOver = true;
@@ -283,26 +271,26 @@ function gameLoop() {
     ctx.fillText("Press ESC Keys To Play Again", 100, 200);
     return;
   } else {
-    Array.prototype.forEach.call(invader, object => {
+    Array.prototype.forEach.call(invader, (object) => {
       object.draw(ctx);
       object.update();
-      if (object.loseCheck(attacker)){
+      if (object.loseCheck(attacker)) {
         gameOver();
         return;
       }
     });
   }
 
-    if (gameState.gameOver==true){
-      return;
-    }
+  if (gameState.gameOver == true) {
+    return;
+  }
 
   if (gameState.gamePaused) {
-    ctx.clearRect(0,0,400,400);
-    ctx.fillStyle="white";
+    ctx.clearRect(0, 0, 400, 400);
+    ctx.fillStyle = "white";
     ctx.font = "15px Arial";
     ctx.fillText("Press Enter To Continue The Game", 100, 200);
-    ctx.font="30px Arial";
+    ctx.font = "30px Arial";
     ctx.fillText("Paused", 100, 170);
     return;
   }
@@ -311,7 +299,7 @@ function gameLoop() {
 
 function gameOver() {
   gameState.gameOver = true;
-  ctx.clearRect(0,0,400,400);
+  ctx.clearRect(0, 0, 400, 400);
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText("Game Over", 100, 160);
@@ -320,10 +308,10 @@ function gameOver() {
 }
 
 function gameReset() {
-  enemyCounts=[
-    [1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1],
+  enemyCounts = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   invaders = enemies(enemyCounts);
   attacker = new Attacker();
@@ -331,31 +319,29 @@ function gameReset() {
   gameState = {
     gameStarted: true,
     gameOver: false,
-    gamePaused: false
+    gamePaused: false,
   };
 }
 
+let audio_laser = new Audio("assests/sounds/laser_sound.mp3");
+let audio_explosion = new Audio("assests/sounds/explosion_sound.mp3");
+let enemyCounts = [
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+];
+let invaders = enemies(enemyCounts);
+let attacker = new Attacker();
+let bullet = new Bullet(attacker);
+let handler = new EventHandler();
 
+let gameState = {
+  gameStarted: false,
+  gameOver: false,
+  gamePaused: false,
+};
 
-  let audio_laser = new Audio("assests/sounds/laser_sound.mp3");
-  let audio_explosion = new Audio("assests/sounds/explosion_sound.mp3");
-  let enemyCounts=[
-    [1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1],
-  ];
-  let invaders = enemies(enemyCounts);
-  let attacker = new Attacker();
-  let bullet = new Bullet(attacker);
-  let handler = new EventHandler();
-
-  let gameState = {
-    gameStarted: false,
-    gameOver: false,
-    gamePaused: false
-  };
-
-  ctx.fillStyle = "white";
-  ctx.font = "15px Arial";
-  ctx.fillText("Press Any Keys To Start The Game", 70, 170);
-  ctx.fillText("Press Enter To Pause/Continue The Game", 70, 200);
+ctx.fillStyle = "white";
+ctx.font = "15px Arial";
+ctx.fillText("Press Any Keys To Start The Game", 70, 170);
+ctx.fillText("Press Enter To Pause/Continue The Game", 70, 200);
